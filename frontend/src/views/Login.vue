@@ -6,7 +6,7 @@
       <b-link class="brand-logo">
         <vuexy-logo />
         <h2 class="brand-text text-primary ml-1">
-          Vuexy
+          Library
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -128,7 +128,7 @@
                 type="submit"
                 variant="primary"
                 block
-                @click="validationForm"
+                @click="login"
               >
                 Sign in
               </b-button>
@@ -193,8 +193,10 @@ import {
 import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
+import axios from 'axios'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
+import router from '@/router'
 import useJwt from '@/auth/jwt/useJwt'
 
 export default {
@@ -222,8 +224,7 @@ export default {
       status: '',
       password: '',
       userEmail: '',
-      sideImg: require('@/assets/images/pages/login-v2.svg'),
-      // validation rulesimport store from '@/store/index'
+      sideImg: require('../assets/images/pages/login-v2.svg'),
       required,
       email,
     }
@@ -235,52 +236,50 @@ export default {
     imgUrl() {
       if (store.state.appConfig.layout.skin === 'dark') {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.sideImg = require('@/assets/images/pages/login-v2-dark.svg')
+        this.sideImg = require('../assets/images/pages/login-v2-dark.svg')
         return this.sideImg
       }
       return this.sideImg
     },
   },
   methods: {
-      login() {
-          this.$refs.loginForm.validate().then(success => {
-              if (success) {
-                  useJwt.login({
-                      email: this.userEmail,
-                      password: this.password,
-                  })
-                      .then(response => {
-                          const { userData } = response.data
-                          useJwt.setToken(response.data.accessToken)
-                          useJwt.setRefreshToken(response.data.refreshToken)
-                          localStorage.setItem('userData', JSON.stringify(userData))
-                          this.$ability.update(userData.ability)
-
-                          // ? This is just for demo purpose as well.
-                          // ? Because we are showing eCommerce app's cart items count in navbar
-                          this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
-
-                          // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
-                          this.$router.replace(getHomeRouteForLoggedInUser(userData.role))
-                              .then(() => {
-                                  this.$toast({
-                                      component: ToastificationContent,
-                                      position: 'top-right',
-                                      props: {
-                                          title: `Welcome ${userData.fullName || userData.username}`,
-                                          icon: 'CoffeeIcon',
-                                          variant: 'success',
-                                          text: `You have successfully logged in as ${userData.role}. Now you can start to explore!`,
-                                      },
-                                  })
-                              })
-                      })
-                      .catch(error => {
-                          this.$refs.loginForm.setErrors(error.response.data.error)
-                      })
-              }
+    login() {
+      this.$refs.loginForm.validate().then(success => {
+        if (success) {
+          axios({
+            method: 'post',
+            url: 'api/auth/login',
+            data: {
+              email: this.userEmail,
+              password: this.password,
+            },
           })
-      },
+            .then(response => {
+              if (response.data) {
+                this.$toast({
+                  component: ToastificationContent,
+                  props: {
+                    title: 'You have logged in successfully!',
+                    icon: 'EditIcon',
+                    variant: 'success',
+                  },
+                })
+                router.push({ name: 'home' })
+              } else {
+                this.$toast({
+                  component: ToastificationContent,
+                  props: {
+                    title: 'Login failed!',
+                    icon: 'EditIcon',
+                    text: 'Invalid credentials!',
+                    variant: 'danger',
+                  },
+                })
+              }
+            })
+        }
+      })
+    },
   },
 }
 </script>
