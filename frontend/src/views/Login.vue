@@ -248,19 +248,24 @@ export default {
         if (success) {
           axios({
             method: 'post',
-            url: 'api/auth/login',
+            url: 'login',
             data: {
               email: this.userEmail,
               password: this.password,
             },
           })
             .then(response => {
+              console.log(response)
               if (response.data) {
+                const dt = new Date()
+                localStorage.setItem('tokenExpiration', dt.setHours(dt.getHours() + 2))
+                localStorage.setItem('user', JSON.stringify(response.data[0]))
                 this.$toast({
                   component: ToastificationContent,
                   props: {
-                    title: 'You have logged in successfully!',
+                    title: `Welcome ${response.data[0].name}`,
                     icon: 'EditIcon',
+                    text: 'You have logged in successfully!',
                     variant: 'success',
                   },
                 })

@@ -15,7 +15,17 @@
           :disabled="!book.available"
           @click.prevent="rentBook(book.id)"
         >
-          Rent
+          Rent Again
+        </b-button>
+      </b-col>
+      <b-col md="2">
+        <b-button
+          size="sm"
+          variant="outline-primary"
+          :disabled="!!book.available"
+          @click.prevent="returnBook(book.id)"
+        >
+          Return
         </b-button>
       </b-col>
       <b-col md="2">
@@ -42,16 +52,28 @@ export default {
     }
   },
   created() {
-    this.getAllBooks()
+    this.getCurrentlyRentedBooksForUser()
   },
   methods: {
-    getAllBooks() {
-      axios({
-        method: 'get',
-        url: '/get_all_books',
-      }).then(response => {
-        this.books = response.data
-      })
+      getAllBooks() {
+          axios({
+              method: 'get',
+              url: '/get_all_books',
+          }).then(response => {
+              this.books = response.data
+          })
+      },
+    getCurrentlyRentedBooksForUser() {
+      axios.get('/get_rented_books_for_user',
+        {
+          params: {
+            user_id: this.user.id,
+            flag: 'current',
+          },
+        })
+        .then(response => {
+          this.books = response.data
+        })
     },
     rentBook(id) {
       axios({
@@ -63,6 +85,18 @@ export default {
         },
       }).then(response => {
         this.getAllBooks()
+      })
+    },
+
+    returnBook(id) {
+      axios({
+        method: 'post',
+        url: '/return_book',
+        data: {
+          id,
+        },
+      }).then(response => {
+          this.getAllBooks()
       })
     },
   },

@@ -1,12 +1,17 @@
 export default [
   {
-    title: 'Home',
+    title: 'List of All Books',
     route: 'home',
     icon: 'HomeIcon',
   },
   {
-    title: 'Second Page',
-    route: 'second-page',
-    icon: 'FileIcon',
+    title: 'My Current library',
+    route: 'current-rented',
+    icon: 'BookIcon',
+  },
+  {
+    title: 'My All-time library',
+    route: 'all-rented',
+    icon: 'BookIcon',
   },
 ]

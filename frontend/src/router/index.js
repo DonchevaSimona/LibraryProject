@@ -15,27 +15,23 @@ const router = new VueRouter({
       name: 'home',
       component: () => import('@/views/Home.vue'),
       meta: {
-        pageTitle: 'Home',
-        breadcrumb: [
-          {
-            text: 'Home',
-            active: true,
-          },
-        ],
+        pageTitle: 'All books in library',
       },
     },
     {
-      path: '/second-page',
-      name: 'second-page',
-      component: () => import('@/views/SecondPage.vue'),
+      path: '/current-rented',
+      name: 'current-rented',
+      component: () => import('@/views/CurrentRented.vue'),
       meta: {
-        pageTitle: 'Second Page',
-        breadcrumb: [
-          {
-            text: 'Second Page',
-            active: true,
-          },
-        ],
+        pageTitle: 'Currently rented books',
+      },
+    },
+    {
+      path: '/all-rented',
+      name: 'all-rented',
+      component: () => import('@/views/AllRented.vue'),
+      meta: {
+        pageTitle: 'All rented books',
       },
     },
     {
@@ -59,6 +55,24 @@ const router = new VueRouter({
       redirect: 'error-404',
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  const tokenExpirationStorage = localStorage.getItem('tokenExpiration')
+  const dt = new Date()
+  if (tokenExpirationStorage !== null && tokenExpirationStorage < dt.setHours(dt.getHours())) {
+    localStorage.removeItem('tokenExpiration')
+    window.location.reload()
+  }
+  if (to.name !== 'login'
+        && to.name !== 'register'
+        && tokenExpirationStorage == null && tokenExpirationStorage < dt.setHours(dt.getHours())) {
+    next({ name: 'login' })
+  } else if (to.name === 'login' && tokenExpirationStorage !== null && tokenExpirationStorage > dt.setHours(dt.getHours())) {
+    next({ name: 'home' })
+  } else {
+    next()
+  }
 })
 
 // ? For splash screen

@@ -15,10 +15,20 @@ class AuthService
     public function login_user($request)
     {
         $credentials = request(['email', 'password']);
-        if (!auth('web')->attempt($credentials)) {
-            return false;
-        } else {
-            return true;
+        if (auth()->attempt($credentials)) {
+                    return $this->auth->user($request->email);
+                } else {
+                    return false;
+                }
+    }
+
+
+    public function get_rented_books_for_user($request)
+    {
+        if ($request->flag == 'current'){
+            return $this->auth->get_currently_rented_books_for_user($request->user_id);
+        }else {
+            return $this->auth->get_all_rented_books_for_user($request->user_id);
         }
     }
 }

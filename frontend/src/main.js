@@ -13,6 +13,8 @@ import './global-components'
 import '@/libs/portal-vue'
 import '@/libs/toastification'
 
+// filters
+import './filter/index'
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)

@@ -9,7 +9,7 @@
 
   <title>Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template</title>
   <!-- Styles -->
-  <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
+  <link rel="stylesheet" href="public/css/app.css">
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="{{ asset('images/logo/favicon.png') }}">

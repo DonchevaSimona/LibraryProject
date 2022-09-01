@@ -13,5 +13,15 @@ use App\Http\Controllers\ApplicationController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/login', [ApplicationController::class, 'index'])->name('login');
+Route::post('/login', [ApplicationController::class, 'login'])->name('login');
+Route::get('get_rented_books_for_user', [ApplicationController::class, 'get_rented_books_for_user']);
+
+
+Route::get('get_all_books', [\App\Http\Controllers\BookController::class, 'get_all_books']);
+Route::post('rent_book', [\App\Http\Controllers\BookController::class, 'rent_book']);
+Route::post('return_book', [\App\Http\Controllers\BookController::class, 'return_book']);
+
+
+
+
 Route::get('/{any}', [ApplicationController::class, 'index'])->where('any', '.*');
