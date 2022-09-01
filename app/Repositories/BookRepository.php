@@ -24,12 +24,26 @@ class BookRepository implements Interfaces\BookRepositoryInterface
 
     public function bind_book_to_user($request)
     {
-        DB::table('user_book')->insert([
+        $bind = [
             'user_id' => $request->user_id,
             'book_id' => $request->id,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-        ]);
+        ];
+        DB::table('user_book')->insert($bind);
+    }
 
+    public function donate_book($request)
+    {
+        $book = [
+            'title' => $request->title,
+            'author' => $request->author,
+            'isbn' => $request->isbn,
+            'year_of_publish' => $request->year_of_publish,
+            'available' => true,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ];
+        Book::insert($book);
     }
 }

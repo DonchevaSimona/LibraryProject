@@ -14,4 +14,9 @@ export default [
     route: 'all-rented',
     icon: 'BookIcon',
   },
+  {
+    title: 'Donate Book',
+    route: 'donate-book',
+    icon: 'BookIcon',
+  },
 ]

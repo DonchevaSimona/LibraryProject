@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApplicationController;
 
@@ -13,13 +14,17 @@ use App\Http\Controllers\ApplicationController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+//ApplicationController
 Route::post('/login', [ApplicationController::class, 'login'])->name('login');
 Route::get('get_rented_books_for_user', [ApplicationController::class, 'get_rented_books_for_user']);
 
 
-Route::get('get_all_books', [\App\Http\Controllers\BookController::class, 'get_all_books']);
-Route::post('rent_book', [\App\Http\Controllers\BookController::class, 'rent_book']);
-Route::post('return_book', [\App\Http\Controllers\BookController::class, 'return_book']);
+//BookController
+Route::get('get_all_books', [BookController::class, 'get_all_books']);
+Route::post('rent_book', [BookController::class, 'rent_book']);
+Route::post('return_book', [BookController::class, 'return_book']);
+Route::post('donate_book', [BookController::class, 'donate_book']);
 
 
 

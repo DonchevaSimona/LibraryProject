@@ -27,4 +27,9 @@ class BookController extends Controller
     {
         $this->book->return_book($request->id);
     }
+
+    public function donate_book(Request $request)
+    {
+        $this->book->donate_book($request);
+    }
 }

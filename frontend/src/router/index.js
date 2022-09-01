@@ -43,6 +43,14 @@ const router = new VueRouter({
       },
     },
     {
+      path: '/donate-book',
+      name: 'donate-book',
+      component: () => import('@/views/DonateBook.vue'),
+      meta: {
+        pageTitle: 'Donate a book from your home library!',
+      },
+    },
+    {
       path: '/error-404',
       name: 'error-404',
       component: () => import('@/views/error/Error404.vue'),

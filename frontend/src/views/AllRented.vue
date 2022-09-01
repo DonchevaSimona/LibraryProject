@@ -11,7 +11,7 @@
       <b-col md="2">
         <b-button
           size="sm"
-          variant="outline-primary"
+          variant="primary"
           :disabled="!book.available"
           @click.prevent="rentBook(book.id)"
         >
@@ -40,11 +40,13 @@ import {
   BCard, BCol, BRow, BButton,
 } from 'bootstrap-vue'
 import axios from 'axios'
+import book from '@/mixins/book'
 
 export default {
   components: {
     BCard, BCol, BRow, BButton,
   },
+  mixins: [book],
   data() {
     return {
       books: [],
@@ -52,53 +54,10 @@ export default {
     }
   },
   created() {
-    this.getRentedBooksForUser()
+    this.getRentedBooksForUser('all')
   },
   methods: {
-    getAllBooks() {
-      axios({
-        method: 'get',
-        url: '/get_all_books',
-      }).then(response => {
-        this.books = response.data
-      })
-    },
-    getRentedBooksForUser() {
-      axios.get('/get_rented_books_for_user',
-        {
-          params: {
-            user_id: this.user.id,
-            flag: 'all',
-          },
-        })
-        .then(response => {
-          this.books = response.data
-        })
-    },
 
-    rentBook(id) {
-      axios({
-        method: 'post',
-        url: '/rent_book',
-        data: {
-          id,
-          user_id: this.user.id,
-        },
-      }).then(response => {
-        this.getAllBooks()
-      })
-    },
-    returnBook(id) {
-      axios({
-        method: 'post',
-        url: '/return_book',
-        data: {
-          id,
-        },
-      }).then(response => {
-        this.getAllBooks()
-      })
-    },
   },
 }
 </script>

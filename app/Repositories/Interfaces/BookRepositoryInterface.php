@@ -10,4 +10,6 @@ interface BookRepositoryInterface
 
     public function bind_book_to_user($request);
 
+    public function donate_book($request);
+
 }

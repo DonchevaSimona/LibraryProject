@@ -7,7 +7,7 @@ use App\Repositories\Interfaces\BookRepositoryInterface;
 class BookService
 {
     public function __construct(
-        BookRepositoryInterface $book
+        BookRepositoryInterface $book,
     )
     {
         $this->book = $book;
@@ -27,6 +27,11 @@ class BookService
     public function return_book($id)
     {
         $this->book->change_available_status($id, true);
+    }
+
+    public function donate_book($request)
+    {
+        $this->book->donate_book($request);
     }
 
 }
